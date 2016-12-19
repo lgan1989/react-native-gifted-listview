@@ -213,6 +213,10 @@ var GiftedListView = React.createClass({
   },
 
   _refresh() {
+    if (this.props.scrollAfterRefresh){
+      this._updateRows([]);
+      this.listView.scrollTo({y:0});
+    }
     this._onRefresh({external: true});
   },
 
@@ -317,14 +321,13 @@ var GiftedListView = React.createClass({
   render() {
     return (
       <ListView
-        ref="listview"
+        ref={ref => this.listView = ref}
         dataSource={this.state.dataSource}
         renderRow={this.props.rowView}
         renderSectionHeader={this.props.sectionHeaderView}
         renderHeader={this.headerView}
         renderFooter={this._renderPaginationView}
         renderSeparator={this.renderSeparator}
-
         automaticallyAdjustContentInsets={false}
         scrollEnabled={this.props.scrollEnabled}
         canCancelContentTouches={true}

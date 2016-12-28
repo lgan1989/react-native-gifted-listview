@@ -209,7 +209,7 @@ var GiftedListView = React.createClass({
   },
 
   setNativeProps(props) {
-    this.refs.listview.setNativeProps(props);
+    this.listView.setNativeProps(props);
   },
 
   _refresh() {
@@ -245,6 +245,10 @@ var GiftedListView = React.createClass({
       });
       this.props.onFetch(this._getPage() + 1, this._postPaginate, {});
     }
+  },
+
+  scrollTo (point) {
+    this.listView.scrollTo(point);
   },
 
   _postPaginate(rows = [], options = {}) {
@@ -287,6 +291,7 @@ var GiftedListView = React.createClass({
     }
   },
 
+
   _renderPaginationView() {
     if ((this.state.paginationStatus === 'fetching' && this.props.pagination === true) || (this.state.paginationStatus === 'firstLoad' && this.props.firstLoader === true)) {
       return this.paginationFetchingView();
@@ -321,7 +326,6 @@ var GiftedListView = React.createClass({
   render() {
     return (
       <ListView
-        ref={ref => this.listView = ref}
         dataSource={this.state.dataSource}
         renderRow={this.props.rowView}
         renderSectionHeader={this.props.sectionHeaderView}
@@ -329,12 +333,12 @@ var GiftedListView = React.createClass({
         renderFooter={this._renderPaginationView}
         renderSeparator={this.renderSeparator}
         automaticallyAdjustContentInsets={false}
+        onScroll={this.props.onScroll}
         scrollEnabled={this.props.scrollEnabled}
         canCancelContentTouches={true}
         refreshControl={this.props.refreshable === true ? this.renderRefreshControl() : null}
-
         {...this.props}
-
+        ref={r => {this.listView = r;}}
         style={this.props.style}
       />
     );
